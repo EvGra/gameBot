@@ -1,46 +1,62 @@
 'use strict';
 
-let input = prompt("Угадай число от 1 до 100");
-let count = 0;
-let atempts;
-
 const isNumber = function(num){
 
   return num !== null ;
 }
 
-function game(i) {
+const game = function () {
+  
+    let randomResult = Math.ceil(Math.random() * 100);
+    let input = prompt("Угадай число от 1 до 100");
+    let count = 0;
+    let atempts;
 
-  count++;
-  atempts = 10 - count;
+    console.log(randomResult);
 
-  console.log(input, typeof input)
-  if (atempts === 0){       
-    return alert("Попытки закончились, хотите сыграть еще?");
+    const repeat = function () {
 
-  }else if (input === null){       
-    return alert("Игра окончена");
+      count++;
+      atempts = 10 - count;
+    
+      switch (true) {
 
-  }else if (i === parseFloat(input)) {  
-    input = confirm("Поздравляю, Вы угадали!!! Хотели бы сыграть еще?");
-    if (input === true) {
-      input = prompt("Угадай число от 1 до 100");
-      count = 0;
-      return game(i);
+        case atempts === 0:
+          alert("Попытки закончились, хотите сыграть еще?");
+          break
+
+        case input === null:
+          alert("Игра окончена");
+          break
+
+        case parseFloat(input) > randomResult:
+          input = prompt("Загаданное число меньше, осталось попыток " + atempts)
+          repeat();
+          break
+
+        case parseFloat(input) < randomResult:
+          input = prompt("Загаданное число больше, осталось попыток " + atempts) 
+          repeat();
+          break
+
+        case parseFloat(input) === randomResult:
+          input = confirm("Поздравляю, Вы угадали!!! Хотели бы сыграть еще?");
+          if (input === true) {
+            input = prompt("Угадай число от 1 до 100");
+            count = 0;
+            repeat();}
+          break
+
+        case (isNumber(input)):
+          input = prompt("Введи число!");
+          repeat();
+          break
+
+      }
+
     }
 
-  } else if (i > parseFloat(input)){
-    input = prompt("Загаданное число больше, осталось попыток " + atempts)     
-    return game(i);
+    repeat(); 
+  }
 
-  } else if (i < parseFloat(input)){
-    input = prompt("Загаданное число меньше, осталось попыток " + atempts)     
-    return game(i);
-
-  } else if (isNumber(input)){
-    input = prompt("Введи число!")    
-    return game(i);
-
-  } 
-}
-game(5);
+  game();
